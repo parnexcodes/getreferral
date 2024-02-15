@@ -20,6 +20,7 @@ model WaitListUser {
 model Invites {
   id             String       @id @default(auto()) @map("_id") @db.ObjectId
   inviteKey      String       @unique @default(uuid())
+  used           Boolean      @default(false)
   approvedUser   WaitListUser @relation(fields: [approvedUserID], references: [id])
   approvedUserID String       @unique @db.ObjectId
 }

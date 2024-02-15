@@ -40,11 +40,27 @@ router.post("/", async (req, res) => {
 
     encryptedPassword = await bcrypt.hash(password, 10);
 
+    if (checkInviteKey.used == true) {
+      return res.status(409).json({
+        error: "Invite key used already!",
+      });
+    }
+
     const user = await prisma.employer.create({
       data: {
         email: email.toLowerCase(),
         password: encryptedPassword,
+        inviteKey: invite_key
       },
+    });
+
+    const revokeInvite = await prisma.invites.update({
+      where: {
+        inviteKey: invite_key
+      },
+      data: {
+        used: true
+      }
     });
 
     const token = jwt.sign({ _id: user.id }, process.env.TOKEN_KEY, {
