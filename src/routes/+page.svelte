@@ -12,17 +12,22 @@
         easy for you
       </p>
       <p class="text-xl text-gray-600">
-        Manage your numerous job refferals using refer me. <span
+        Manage your numerous job refferals using getReferral. <span
           class="text-[#FB980D]">Free, Convenient</span
         >
         & <span class="text-[#FB980D]">Easy to Use.</span>
       </p>
-      <div class="pt-16 flex">
+      <div class="pt-16 flex gap-4">
         <a
-          href="/dashboard"
+          href="/signup/candidate"
           class="text-white bg-[#0428C5] self-start pl-8 pr-8 pt-4 pb-4 rounded-full"
-          >Create a Job Opening</a
+          >Get Referred</a
         >
+        <a
+        href="/waitlist"
+        class="text-black bg-[#FFFFFF] border-2 border-[#0428C5] self-start pl-8 pr-8 pt-4 pb-4 rounded-full"
+        >Give Referrals</a
+      >
       </div>
     </div>
     <img src="/mainLogo.svg" alt="" />

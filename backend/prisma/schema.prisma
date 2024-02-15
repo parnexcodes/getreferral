@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model WaitListUser {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  email       String   @unique
+  linkedinURL String   @unique
+  invite      Invites?
+}
+
+model Invites {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  inviteKey      String       @unique @default(uuid())
+  approvedUser   WaitListUser @relation(fields: [approvedUserID], references: [id])
+  approvedUserID String       @unique @db.ObjectId
+}
+
+model ApprovedUser {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  email       String @unique
+  linkedinURL String @unique
+  inviteKey   String @unique
+}
+
+model Employer {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  email     String @unique
+  password  String
+  inviteKey String @unique
+  job       Job?
+}
+
+model Candidate {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String @unique
+  password String
+}
+
+model Job {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  companyName        String
+  location           String
+  compensation       String
+  jobDescriptionLink String
+  additionalInfo     String
+  employer           Employer @relation(fields: [employerID], references: [id])
+  employerID         String   @unique @db.ObjectId
+}
