@@ -25,13 +25,6 @@ model Invites {
   approvedUserID String       @unique @db.ObjectId
 }
 
-model ApprovedUser {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  email       String @unique
-  linkedinURL String @unique
-  inviteKey   String @unique
-}
-
 model Employer {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   email     String @unique
