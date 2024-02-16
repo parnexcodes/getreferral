@@ -1,43 +1,75 @@
 <script>
-    import Header from "../../../components/Header.svelte";
-    let email = "";
-    let password = "";
-  </script>
-  
-  <div class="min-h-screen bg-[#FFFFFF]">
-    <Header />
-    <div class="flex justify-center mt-16">
-      <div class="flex flex-col gap-8">
-        <h1 class="text-center text-4xl font-sans font-thin tracking-wide">
-          Employer Login
-        </h1>
-        <!-- <label for="">Email</label> -->
-        <input
-          class="border border-black rounded-md p-4"
-          size="50"
-          type="text"
-          placeholder="Enter your email"
-          name=""
-          id=""
-          required
-          bind:value={email}
-        />
-        <input
-          class="border border-black rounded-md p-4"
-          size="50"
-          type="text"
-          placeholder="Enter password"
-          name=""
-          id=""
-          required
-          bind:value={password}
-        />
-        <button
-          class="text-white bg-[#0428C5] pl-8 pr-8 pt-4 pb-4 rounded-full"
-          on:click={apiReq}>Submit</button
+  import { toast } from "svelte-sonner";
+  import { Input } from "$lib/components/ui/input";
+  import { goto } from '$app/navigation';
+  import Header from "../../../components/Header.svelte";
+  let email = "";
+  let password = "";
+  async function apiReq() {
+    const req = await fetch("http://localhost:3000/api/auth/employer/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    });
+    const resp = await req.json();
+
+    if (!req.ok) {
+      toast(resp.error);
+    } else {
+      localStorage.setItem("accessToken", resp.accessToken);
+      toast("Logged in successfully!");
+      setTimeout(() => {
+        goto("/dashboard");
+      }, 1500);
+    }
+  }
+</script>
+
+<div class="min-h-screen bg-[#FFFFFF]">
+  <Header />
+  <div class="flex justify-center mt-16">
+    <div class="flex flex-col gap-8">
+      <h1 class="text-center text-4xl font-sans font-thin tracking-wide text-black">
+        Employer Login
+      </h1>
+      <div class="space-y-4">
+      <Input
+        class="border border-black rounded-md p-4 bg-white text-black"
+        size="50"
+        type="email"
+        placeholder="Enter your email"
+        name=""
+        id=""
+        required
+        bind:value={email}
+      />
+      <Input
+        class="border border-black rounded-md p-4 bg-white text-black"
+        size="50"
+        type="password"
+        placeholder="Enter password"
+        name=""
+        id=""
+        required
+        bind:value={password}
+      />
+    </div>
+      <button
+        class="text-white bg-[#0428C5] pl-8 pr-8 pt-4 pb-4 rounded-full"
+        on:click={apiReq}>Submit</button
+      >
+      <div class="text-black self-center">
+        Don't have an account ? <a
+          class="text-[#0428C5]"
+          data-sveltekit-reload
+          href="/signup/employer">Signup!</a
         >
-        <div>Don't have an account ? <a class="text-[#0428C5]" data-sveltekit-reload href="/signup/employer">Signup!</a></div>
       </div>
     </div>
   </div>
-  
+</div>

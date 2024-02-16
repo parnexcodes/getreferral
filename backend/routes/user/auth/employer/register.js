@@ -6,9 +6,9 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
-    const { email, password, invite_key } = req.body;
+    const { email, password, invite_key, first_name, last_name } = req.body;
 
-    if (!(email && password && invite_key)) {
+    if (!(email && password && invite_key && first_name && last_name)) {
       return res.status(400).json({
         error: "All input is required",
       });
@@ -50,17 +50,19 @@ router.post("/", async (req, res) => {
       data: {
         email: email.toLowerCase(),
         password: encryptedPassword,
-        inviteKey: invite_key
+        inviteKey: invite_key,
+        firstName: first_name,
+        lastName: last_name,
       },
     });
 
     const revokeInvite = await prisma.invites.update({
       where: {
-        inviteKey: invite_key
+        inviteKey: invite_key,
       },
       data: {
-        used: true
-      }
+        used: true,
+      },
     });
 
     const token = jwt.sign({ _id: user.id }, process.env.TOKEN_KEY, {

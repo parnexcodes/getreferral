@@ -5,6 +5,12 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const { userid } = req.body;
   try {
+    if (!userid) {
+      return res.status(400).json({
+        error: "All input is required",
+      });
+    }
+
     const checkInviteKey = await prisma.invites.findFirst({
       where: {
         approvedUser: {

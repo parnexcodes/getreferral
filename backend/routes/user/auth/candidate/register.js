@@ -6,9 +6,9 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, first_name, last_name } = req.body;
 
-    if (!(email && password)) {
+    if (!(email && password && first_name && last_name)) {
       return res.status(400).json({
         error: "All input is required",
       });
@@ -32,11 +32,13 @@ router.post("/", async (req, res) => {
       data: {
         email: email.toLowerCase(),
         password: encryptedPassword,
+        firstName: first_name,
+        lastName: last_name,
       },
     });
 
     const token = jwt.sign({ _id: user.id }, process.env.TOKEN_KEY, {
-      expiresIn: "2h",
+      expiresIn: "7d",
     });
 
     user.token = token;

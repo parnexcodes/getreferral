@@ -5,6 +5,12 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const { email, linkedinURL } = req.body;
   try {
+    if (!(email && linkedinURL)) {
+      return res.status(400).json({
+        error: "All input is required",
+      });
+    }
+
     const checkWaitList = await prisma.waitListUser.findUnique({
       where: {
         email: email,
@@ -12,7 +18,8 @@ router.post("/", async (req, res) => {
     });
     if (checkWaitList) {
       return res.status(400).json({
-        message: "Already waitlisted, please check your mail for further process.",
+        message:
+          "Already waitlisted, please check your mail for further process.",
         id: checkWaitList.id,
       });
     }

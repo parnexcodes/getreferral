@@ -20,14 +20,16 @@
       <div class="pt-16 flex gap-4">
         <a
           href="/signup/candidate"
+          data-sveltekit-reload
           class="text-white bg-[#0428C5] self-start pl-8 pr-8 pt-4 pb-4 rounded-full"
           >Get Referred</a
         >
         <a
-        href="/waitlist"
-        class="text-black bg-[#FFFFFF] border-2 border-[#0428C5] self-start pl-8 pr-8 pt-4 pb-4 rounded-full"
-        >Give Referrals</a
-      >
+          href="/waitlist"
+          data-sveltekit-reload
+          class="text-black bg-[#FFFFFF] border-2 border-[#0428C5] self-start pl-8 pr-8 pt-4 pb-4 rounded-full"
+          >Give Referrals</a
+        >
       </div>
     </div>
     <img src="/mainLogo.svg" alt="" />

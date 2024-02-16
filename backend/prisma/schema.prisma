@@ -29,14 +29,18 @@ model Employer {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   email     String @unique
   password  String
+  firstName String
+  lastName  String
   inviteKey String @unique
   job       Job?
 }
 
 model Candidate {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  email    String @unique
-  password String
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  email     String @unique
+  password  String
+  firstName String
+  lastName  String
 }
 
 model Job {

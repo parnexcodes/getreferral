@@ -31,6 +31,8 @@ router.post("/", async (req, res) => {
         accessToken: token,
         id: user.id,
         email: user.email,
+        first_name: user.firstName,
+        last_name: user.lastName,
       });
     }
     return res.status(400).json({
