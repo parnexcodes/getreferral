@@ -28,10 +28,11 @@
     if (!req.ok) {
       toast(resp.error);
     } else {
+      localStorage.setItem("userid", resp.id);
       localStorage.setItem("accessToken", resp.accessToken);
       toast.success("Signed up successfully!");
       setTimeout(() => {
-        goto("/dashboard");
+        goto("/dashboard/candidate");
       }, 1500);
     }
   }

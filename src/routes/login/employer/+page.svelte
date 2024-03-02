@@ -21,10 +21,11 @@
     if (!req.ok) {
       toast(resp.error);
     } else {
+      localStorage.setItem("userid", resp.id);
       localStorage.setItem("accessToken", resp.accessToken);
-      toast("Logged in successfully!");
+      toast.success("Logged in successfully!");
       setTimeout(() => {
-        goto("/dashboard");
+        goto("/dashboard/employer");
       }, 1500);
     }
   }

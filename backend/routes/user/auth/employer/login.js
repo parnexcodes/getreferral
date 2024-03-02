@@ -33,6 +33,7 @@ router.post("/", async (req, res) => {
         email: user.email,
         first_name: user.firstName,
         last_name: user.lastName,
+        role: user.role
       });
     }
     return res.status(400).json({
