@@ -23,9 +23,10 @@ const employer_user = require("./routes/user/auth/employer/user");
 const candidate_register = require("./routes/user/auth/candidate/register");
 const candidate_login = require("./routes/user/auth/candidate/login");
 const candidate_user = require("./routes/user/auth/candidate/user");
+const candidate_profile = require("./routes/user/auth/candidate/candidate-profile");
 
 // Import middleware
-const auth = require("./middleware/auth")
+const auth = require("./middleware/auth");
 
 // Register user routes
 app.use("/api/user/waitlist", waitlist);
@@ -40,7 +41,8 @@ app.use("/api/auth/employer/login", employer_login);
 app.use("/api/auth/employer/me", auth, employer_user);
 app.use("/api/auth/candidate/register", candidate_register);
 app.use("/api/auth/candidate/login", candidate_login);
-app.use("/api/auth/candidate/me", auth, candidate_user);
+app.use("/api/candidate/me", auth, candidate_user);
+app.use("/api/candidate/candidate-profile", auth, candidate_profile);
 
 app.get("/", (req, res) => {
   res.json({
