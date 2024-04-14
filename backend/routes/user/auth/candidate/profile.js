@@ -18,7 +18,7 @@ router.get("/:userId", async (req, res) => {
     });
 
     if (!profile) {
-      return res.status(404).json({ error: "Candidate profile not found" });
+      return res.status(401).json({ error: "Candidate profile not found" });
     }
 
     res.json(profile);

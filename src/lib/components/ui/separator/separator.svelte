@@ -1,6 +1,6 @@
 <script>
 	import { Separator as SeparatorPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils";
+	import { cn } from "$lib/utils.js";
 	let className = undefined;
 	export let orientation = "horizontal";
 	export let decorative = undefined;

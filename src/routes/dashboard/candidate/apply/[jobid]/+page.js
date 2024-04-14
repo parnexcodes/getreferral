@@ -7,7 +7,7 @@ export const load = async ({ fetch, params }) => {
     const userid = localStorage.getItem("userid");
     const accessToken = localStorage.getItem("accessToken");
     const req = await fetch(
-      `http://localhost:3000/api/job/candidates/${params.jobid}`,
+      `http://localhost:3000/api/job/employer/${params.jobid}`,
       {
         method: "GET",
         headers: {
@@ -18,9 +18,7 @@ export const load = async ({ fetch, params }) => {
     );
     if (req.ok) {
       const resp = await req.json();
-      return {
-        result: resp
-      };
+      return resp;
     }
     else {
       return {

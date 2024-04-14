@@ -45,6 +45,7 @@ model Candidate {
   lastName         String
   role             String            @default("Candidate")
   candidateProfile CandidateProfile?
+  responses        Response[]
 }
 
 // CandidateProfile model
@@ -57,7 +58,6 @@ model CandidateProfile {
   candidateID       String             @unique @db.ObjectId
   skills            CandidateSkill[]
   previousCompanies CandidateCompany[]
-  Response          Response[]
 }
 
 // Skill model
@@ -108,9 +108,9 @@ model Job {
 
 // Response model
 model Response {
-  id                 String           @id @default(auto()) @map("_id") @db.ObjectId
-  job                Job              @relation(fields: [jobID], references: [id])
-  jobID              String           @db.ObjectId
-  candidate          CandidateProfile @relation(fields: [candidateProfileID], references: [id])
-  candidateProfileID String           @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  job         Job       @relation(fields: [jobID], references: [id])
+  jobID       String    @db.ObjectId
+  candidate   Candidate @relation(fields: [candidateID], references: [id])
+  candidateID String    @db.ObjectId
 }

@@ -22,4 +22,25 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Route to get information about a specific job
+router.get("/:jobId", async (req, res) => {
+  try {
+    const { jobId } = req.params;
+
+    // Retrieve the job information
+    const job = await prisma.job.findUnique({
+      where: { id: jobId },
+    });
+
+    if (!job) {
+      return res.status(401).json({ error: "Job not found" });
+    }
+
+    res.status(200).json(job);
+  } catch (error) {
+    console.error("Error retrieving job information:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;

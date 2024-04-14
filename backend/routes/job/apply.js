@@ -6,7 +6,7 @@ const router = express.Router();
 router.post("/apply/:jobId", async (req, res) => {
   try {
     const { jobId } = req.params;
-    const { candidateId, candidateProfileId } = req.body;
+    const { candidateId } = req.body;
 
     // Check if the job exists
     const job = await prisma.job.findUnique({
@@ -14,23 +14,35 @@ router.post("/apply/:jobId", async (req, res) => {
     });
 
     if (!job) {
-      return res.status(404).json({ error: "Job not found" });
+      return res.status(401).json({ error: "Job not found" });
     }
 
-    // Check if the candidate profile exists
-    const candidateProfile = await prisma.candidateProfile.findUnique({
-      where: { id: candidateProfileId },
+    // Check if the candidate exists
+    const candidate = await prisma.candidate.findUnique({
+      where: { id: candidateId },
     });
 
-    if (!candidateProfile) {
-      return res.status(404).json({ error: "Candidate profile not found" });
+    if (!candidate) {
+      return res.status(401).json({ error: "Candidate not found" });
     }
 
-    // Apply for the job
+    // Check if the candidate has already applied for the job
+    const existingResponse = await prisma.response.findFirst({
+      where: {
+        jobID: jobId,
+        candidateID: candidateId,
+      },
+    });
+
+    if (existingResponse) {
+      return res.status(401).json({ error: "Candidate has already applied for this job" });
+    }
+
+    // Create a new response to connect the candidate to the job
     const response = await prisma.response.create({
       data: {
         job: { connect: { id: jobId } },
-        candidateProfile: { connect: { id: candidateProfileId } },
+        candidate: { connect: { id: candidateId } },
       },
     });
 
@@ -52,7 +64,7 @@ router.delete("/revert/:responseId", async (req, res) => {
     });
 
     if (!response) {
-      return res.status(404).json({ error: "Response not found" });
+      return res.status(401).json({ error: "Response not found" });
     }
 
     // Delete the response

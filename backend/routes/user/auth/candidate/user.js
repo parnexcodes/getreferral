@@ -36,6 +36,11 @@ router.get("/", async (req, res, next) => {
             totalExp: true,
           },
         },
+        responses: {
+          include: {
+            job: true,
+          },
+        },
       },
     });
     if (userProfile) {
