@@ -12,7 +12,7 @@
   let userid = localStorage.getItem("userid");
   let accessToken = localStorage.getItem("accessToken");
   async function apiReq() {
-    const req = await fetch("http://localhost:3000/api/job", {
+    const req = await fetch("http://localhost:3000/api/employer/job", {
       method: "POST",
       body: JSON.stringify({
         title: title,

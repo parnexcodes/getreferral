@@ -3,7 +3,7 @@ const { prisma } = require("../../../../util/prisma");
 const router = express.Router();
 
 // GET /api/candidate-profile/:userId
-router.get("/api/candidate-profile/:userId", async (req, res) => {
+router.get("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
 
@@ -29,7 +29,7 @@ router.get("/api/candidate-profile/:userId", async (req, res) => {
 });
 
 // POST /api/candidate-profile
-app.post("/api/candidate-profile", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       userId,
@@ -71,25 +71,86 @@ app.post("/api/candidate-profile", async (req, res) => {
       },
     });
 
-    // Upsert skills
+    // Upsert skills and connect them to the profile
     for (const skill of skills) {
-      await prisma.skill.upsert({
+      const existingSkill = await prisma.skill.findFirst({
         where: { name: skill.toLowerCase() },
-        create: { name: skill.toLowerCase() },
-        update: {},
       });
+
+      if (existingSkill) {
+        await prisma.candidateSkill.create({
+          data: {
+            skill: { connect: { id: existingSkill.id } },
+            candidateProfile: { connect: { candidateID: userId } },
+          },
+        });
+      } else {
+        const createdSkill = await prisma.skill.create({
+          data: { name: skill.toLowerCase() },
+        });
+        await prisma.candidateSkill.create({
+          data: {
+            skill: { connect: { id: createdSkill.id } },
+            candidateProfile: { connect: { candidateID: userId } },
+          },
+        });
+      }
     }
 
-    // Upsert previous companies
+    // Upsert previous companies and connect them to the profile
     for (const company of previousCompanies) {
-      await prisma.company.upsert({
+      const existingCompany = await prisma.company.findFirst({
         where: { name: company.toLowerCase() },
-        create: { name: company.toLowerCase() },
-        update: {},
       });
+
+      if (existingCompany) {
+        await prisma.candidateCompany.create({
+          data: {
+            company: { connect: { id: existingCompany.id } },
+            candidateProfile: { connect: { candidateID: userId } },
+          },
+        });
+      } else {
+        const createdCompany = await prisma.company.create({
+          data: { name: company.toLowerCase() },
+        });
+        await prisma.candidateCompany.create({
+          data: {
+            company: { connect: { id: createdCompany.id } },
+            candidateProfile: { connect: { candidateID: userId } },
+          },
+        });
+      }
     }
 
-    res.json(profile);
+    // Retrieve the profile with skills and previous companies including their names
+    const updatedProfile = await prisma.candidateProfile.findUnique({
+      where: { candidateID: userId },
+      include: {
+        skills: {
+          select: {
+            skill: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        previousCompanies: {
+          select: {
+            company: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    res.json(updatedProfile); // Return the updated profile including skills and previous companies
   } catch (error) {
     console.error("Error creating or updating candidate profile:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -97,7 +158,7 @@ app.post("/api/candidate-profile", async (req, res) => {
 });
 
 // PUT /api/candidate-profile
-router.put("/api/candidate-profile", async (req, res) => {
+router.put("/", async (req, res) => {
   try {
     const {
       userId,
@@ -130,7 +191,7 @@ router.put("/api/candidate-profile", async (req, res) => {
 });
 
 // DELETE /api/candidate-profile
-router.delete("/api/candidate-profile", async (req, res) => {
+router.delete("/", async (req, res) => {
   try {
     const { userId } = req.body;
 
@@ -145,3 +206,5 @@ router.delete("/api/candidate-profile", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+module.exports = router;

@@ -6,7 +6,7 @@ export async function load({ fetch }) {
     const userid = localStorage.getItem("userid");
     const accessToken = localStorage.getItem("accessToken");
     const req = await fetch(
-      `http://localhost:3000/api/auth/candidate/me?userid=${userid}`,
+      `http://localhost:3000/api/candidate/me?userid=${userid}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

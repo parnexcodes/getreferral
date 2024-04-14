@@ -14,6 +14,29 @@ router.get("/", async (req, res, next) => {
       where: {
         id: userid,
       },
+      include: {
+        candidateProfile: {
+          select: {
+            id: true,
+            city: true,
+            currentCompany: true,
+            previousCompanies: {
+              select: {
+                company: true,
+                companyID: false, // Exclude companyID
+              },
+            },
+            skills: {
+              select: {
+                skill: true,
+                id: false, // Exclude id
+                skillID: false, // Exclude skillID
+              },
+            },
+            totalExp: true,
+          },
+        },
+      },
     });
     if (userProfile) {
       return res.status(200).json(userProfile);

@@ -91,51 +91,57 @@
 <div class="flex">
   <SidebarEmployer />
   <div class="py-8 px-8 flex justify-center h-full w-full">
-    <div class="flex flex-col">
-      <div class="text-center">
-        <h1 class="text-2xl">{data.title}</h1>
-        <h1>{data.companyName}</h1>
-        <h1>{data.jobDescriptionLink}</h1>
-      </div>
-      <div class="mt-8 w-full">
-        <Table.Root>
-          <Table.Caption>A list of all candidates.</Table.Caption>
-          <Table.Header>
-            <Table.Row>
-              <Table.Head class="w-[100px]">Email</Table.Head>
-              <Table.Head>Total exp</Table.Head>
-              <Table.Head>Skills</Table.Head>
-              <Table.Head>Previous Companies</Table.Head>
-              <Table.Head>Current Company</Table.Head>
-              <Table.Head>City</Table.Head>
-            </Table.Row>
-          </Table.Header>
-          {#each dummyData as data}
-            <Table.Body>
-              <Table.Row>
-                <Table.Cell class="font-medium">{data.email}</Table.Cell>
-                <Table.Cell>{data.total_exp}</Table.Cell>
-                <Table.Cell
-                  ><div class="space-x-2 flex flex-wrap">
-                    {#each data.skills as skill}
-                      <Badge>{skill}</Badge>
-                    {/each}
-                  </div></Table.Cell
-                >
-                <Table.Cell
-                  ><div class="space-x-2 flex flex-wrap">
-                    {#each data.prev_companies as company}
-                      <Badge>{company}</Badge>
-                    {/each}
-                  </div></Table.Cell
-                >
-                <Table.Cell><Badge>{data.current_company}</Badge></Table.Cell>
-                <Table.Cell><Badge>{data.city}</Badge></Table.Cell>
-              </Table.Row>
-            </Table.Body>
-          {/each}
-        </Table.Root>
-      </div>
+    {#if data.result == 404}
+    <div>
+      <h1 class="text-3xl">No Candidates Found!</h1>
     </div>
+    {:else}
+      <div class="flex flex-col">
+        <div class="text-center">
+          <h1 class="text-2xl">{data.title}</h1>
+          <h1>{data.companyName}</h1>
+          <h1>{data.jobDescriptionLink}</h1>
+        </div>
+        <div class="mt-8 w-full">
+          <Table.Root>
+            <Table.Caption>A list of all candidates.</Table.Caption>
+            <Table.Header>
+              <Table.Row>
+                <Table.Head class="w-[100px]">Email</Table.Head>
+                <Table.Head>Total exp</Table.Head>
+                <Table.Head>Skills</Table.Head>
+                <Table.Head>Previous Companies</Table.Head>
+                <Table.Head>Current Company</Table.Head>
+                <Table.Head>City</Table.Head>
+              </Table.Row>
+            </Table.Header>
+            {#each dummyData as data}
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell class="font-medium">{data.email}</Table.Cell>
+                  <Table.Cell>{data.total_exp}</Table.Cell>
+                  <Table.Cell
+                    ><div class="space-x-2 flex flex-wrap">
+                      {#each data.skills as skill}
+                        <Badge>{skill}</Badge>
+                      {/each}
+                    </div></Table.Cell
+                  >
+                  <Table.Cell
+                    ><div class="space-x-2 flex flex-wrap">
+                      {#each data.prev_companies as company}
+                        <Badge>{company}</Badge>
+                      {/each}
+                    </div></Table.Cell
+                  >
+                  <Table.Cell><Badge>{data.current_company}</Badge></Table.Cell>
+                  <Table.Cell><Badge>{data.city}</Badge></Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            {/each}
+          </Table.Root>
+        </div>
+      </div>
+    {/if}
   </div>
 </div>

@@ -2,13 +2,15 @@
     import SidebarEmployer from "../../../components/SidebarEmployer.svelte";
     import { Separator } from "$lib/components/ui/separator";
     import Icon from "@iconify/svelte";
+    export let data
+    let apiData = data.data
   </script>
   
   <div class="flex">
     <SidebarEmployer />
     <div class="flex flex-col px-8 py-8">
       <div class="">
-        <h1 class="text-3xl">Welcome back, Paranjay!</h1>
+        <h1 class="text-3xl">Welcome back, {apiData.firstName}!</h1>
         <Separator class="mt-4" />
       </div>
       <div class="mt-4 flex gap-8">

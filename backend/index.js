@@ -14,7 +14,10 @@ const waitlist = require("./routes/user/waitlist");
 const generateInvite = require("./routes/user/generate_invite");
 
 // Import job routes
-const job = require("./routes/job");
+const job_routes = require("./routes/user/auth/employer/job");
+const employer_jobs_routes = require("./routes/job/employerJobs");
+const job_candidates_routes = require("./routes/job/jobCandidates");
+const job_apply = require("./routes/job/apply");
 
 // Import Auth routes
 const employer_register = require("./routes/user/auth/employer/register");
@@ -23,7 +26,7 @@ const employer_user = require("./routes/user/auth/employer/user");
 const candidate_register = require("./routes/user/auth/candidate/register");
 const candidate_login = require("./routes/user/auth/candidate/login");
 const candidate_user = require("./routes/user/auth/candidate/user");
-const candidate_profile = require("./routes/user/auth/candidate/candidate-profile");
+const candidate_profile = require("./routes/user/auth/candidate/profile");
 
 // Import middleware
 const auth = require("./middleware/auth");
@@ -33,7 +36,10 @@ app.use("/api/user/waitlist", waitlist);
 app.use("/api/user/invite", generateInvite);
 
 // Register job route
-app.use("/api/job", auth, job);
+app.use("/api/employer/job", auth, job_routes);
+app.use("/api/job/employer", auth, employer_jobs_routes);
+app.use("/api/job/candidates", auth, job_candidates_routes);
+app.use("/api/job", auth, job_apply);
 
 // Register Auth routes
 app.use("/api/auth/employer/register", employer_register);
@@ -42,7 +48,7 @@ app.use("/api/auth/employer/me", auth, employer_user);
 app.use("/api/auth/candidate/register", candidate_register);
 app.use("/api/auth/candidate/login", candidate_login);
 app.use("/api/candidate/me", auth, candidate_user);
-app.use("/api/candidate/candidate-profile", auth, candidate_profile);
+app.use("/api/candidate/profile", auth, candidate_profile);
 
 app.get("/", (req, res) => {
   res.json({
